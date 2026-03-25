@@ -7,9 +7,9 @@ time.sleep(20)  # Aguarda o MySQL iniciar
 
 conn = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="max123",
     port=3307,
+    user="admin",        # novo usuário
+    password="admin123", # nova senha
     database="secretaria"
 )
 
