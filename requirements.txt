@@ -1,3 +1,6 @@
 
 mysql-connector-python
 redis
+qdrant-client
+sentence-transformers
+minio
