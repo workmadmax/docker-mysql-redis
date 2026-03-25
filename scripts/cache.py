@@ -13,8 +13,7 @@ mysql_conn = mysql.connector.connect(
 )
 redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
 
-CACHE_TTL = 180  # segundos que o cache dura
-
+CACHE_TTL = 180
 
 def buscar_por_categoria(categoria: str):
     cache_key = f"consulta:{categoria}"
