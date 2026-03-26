@@ -1,7 +1,16 @@
 import mysql.connector
+import os
+import logging
+import warnings
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct
 from sentence_transformers import SentenceTransformer
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" 
+logging.getLogger("transformers").setLevel(logging.ERROR)
+warnings.filterwarnings("ignore")
+
 
 mysql_conn = mysql.connector.connect(
     host="localhost", port=3307,

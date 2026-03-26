@@ -6,13 +6,21 @@
 #    By: mdouglas <mdouglas@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/25 18:49:57 by mdouglas          #+#    #+#              #
-#    Updated: 2026/03/25 18:50:03 by mdouglas         ###   ########.fr        #
+#    Updated: 2026/03/26 15:29:49 by mdouglas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import mysql.connector
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
+
+import os
+import logging
+import warnings
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" 
+logging.getLogger("transformers").setLevel(logging.ERROR)
+warnings.filterwarnings("ignore")
 
 mysql_conn = mysql.connector.connect(
     host="localhost", port=3307,
@@ -31,16 +39,12 @@ print("█"*55)
 def buscar(consulta: str, top: int = 3):
     print(f"\n🔍 Consulta: '{consulta}'")
     print("─"*55)
-
     vetor_consulta = model.encode(consulta).tolist()
-
-    # Nova API do qdrant-client
     response = qdrant.query_points(
         collection_name=COLLECTION,
         query=vetor_consulta,
         limit=top
     )
-
     cursor = mysql_conn.cursor(dictionary=True)
     for r in response.points:
         cursor.execute("SELECT * FROM item_vetorial WHERE id = %s", (r.id,))
@@ -49,7 +53,7 @@ def buscar(consulta: str, top: int = 3):
         print(f"     Categoria: {item['categoria']}")
         print(f"     Descrição: {item['descricao']}\n")
     cursor.close()
-
+    
 buscar("aprendizado de máquina e inteligência")
 buscar("segurança e criptografia de dados")
 buscar("como funcionam os containers Docker")
