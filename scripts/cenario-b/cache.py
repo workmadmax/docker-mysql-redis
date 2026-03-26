@@ -18,26 +18,20 @@ CACHE_TTL = 180
 def buscar_por_categoria(categoria: str):
     cache_key = f"consulta:{categoria}"
 
-    # 1. Tenta buscar no Redis
     cached = redis_client.get(cache_key)
     if cached:
         print(f"  [CACHE HIT] ✅ Dados vieram do Redis")
         return json.loads(cached)
 
-    # 2. Cache miss → busca no MySQL
     print(f"  [CACHE MISS] 🔍 Buscando no MySQL...")
     cursor = mysql_conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM item WHERE categoria = %s", (categoria,))
     resultado = cursor.fetchall()
     cursor.close()
-
-    # 3. Salva resultado no Redis com TTL
     redis_client.setex(cache_key, CACHE_TTL, json.dumps(resultado))
     print(f"  [CACHE SET] 💾 Salvo no Redis por {CACHE_TTL}s")
 
     return resultado
-
-
 # --- Demonstração ---
 categoria = "Horários"
 

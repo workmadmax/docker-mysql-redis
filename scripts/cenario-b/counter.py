@@ -2,12 +2,10 @@ import redis
 
 redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
 
-
 def registrar_acesso(categoria: str):
     chave = f"acessos:{categoria}"
     total = redis_client.incr(chave)
     print(f"  📊 '{categoria}' — total de acessos: {total}")
-
 
 # Simulando acessos de diferentes usuários ao longo do dia
 acessos_simulados = [

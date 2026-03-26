@@ -5,7 +5,6 @@ redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
 
 def ranking_categorias():
     contagens = []
-
     # SCAN itera em lotes sem bloquear o Redis
     cursor = 0
     while True:
@@ -16,11 +15,9 @@ def ranking_categorias():
             contagens.append((categoria, total))
         if cursor == 0:
             break
-
     if not contagens:
         print("Nenhum acesso registrado ainda.")
         return
-
     contagens.sort(key=lambda x: x[1], reverse=True)
 
     print("\n" + "="*45)
